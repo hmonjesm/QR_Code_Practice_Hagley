@@ -3,20 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <title>Exhibit Video</title>
+
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 40px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 30px;
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    iframe {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>Exhibit Walkthrough</h1>
+  <h1>Exhibit Walkthrough</h1>
+  <p>Watch the exhibit overview below:</p>
 
-<p>Watch the exhibit overview below:</p>
-
-<iframe width="560" height="315" 
-src="https://www.youtube.com/embed/yqLuimEJJoc" 
-title="YouTube video player" 
-frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-allowfullscreen>
-</iframe>
+  <div class="video-container">
+    <iframe width="560" height="315"
+      src="https://www.youtube.com/embed/yqLuimEJJoc"
+      title="YouTube video player"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+  </div>
 
 </body>
 </html>
