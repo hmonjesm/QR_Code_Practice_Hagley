@@ -1,18 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Birkenhead Rolling Wheel – Hagley Museum</title>
+  <title>Birkenhead Rolling Wheels – Hagley Museum</title>
 </head>
+
 <body>
 
-  <h1>Birkenhead Rolling Wheel</h1>
+<h1>Birkenhead Rolling Wheels</h1>
 
-  <img 
-    src="bh-rolling-wheel.png" 
-    alt="Birkenhead Rolling Wheel at Hagley Museum"
-    width="600"
-  >
+<img src="test.jpg" width="600" alt="Birkenhead Rolling Wheels">
+
+<script>
+alert("QR script loaded");
+</script>
+
+<p>
+This exhibit highlights the historical use of rolling wheels in the Birkenhead area and their role in early industrial processes.
+</p>
+
+<script>
+/* =========================
+   CONFIGURATION
+========================= */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzm0wgH5Tdlz8KEGJcXRE4jif9Rxn_Ma3Vf_Dn-RhwMbKAT1LnZvLIs0uM1gts01k6rIQ/exec";   // Google Apps Script /exec URL
+const EXHIBIT_NAME = "Birkenhead Rolling Wheels";
+const WEATHER_API_KEY = "e23c0a18cd0744e940f5020207c57793";
+
+/* =========================
+   SEND SCAN TO AIRTABLE
+========================= */
+function sendScan(weatherInfo) {
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      exhibit: EXHIBIT_NAME,
+      weather: weatherInfo
+    })
+  });
+}
+
+/* =========================
+   GET WEATHER DATA
+========================= */
+function logScan() {
+  if (!navigator.geolocation) {
+    sendScan("Location unavailable");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${WEATHER_API_KEY}`
+      )
+        .then(response => response.json())
+        .then(data => {
+          const condition = data.weather?.[0]?.main || "Unknown";
+          const temp = Math.round(data.main?.temp);
+
+          const weatherString = `${data.weather[0].description} (${temp}°F)`;
+
+          sendScan(weatherString);
+        })
+        .catch(() => sendScan("Weather unavailable"));
+    },
+    () => sendScan("Location denied")
+  );
+}
+
+/* =========================
+   RUN ON PAGE LOAD
+========================= */
+logScan();
+</script>
 
 </body>
 </html>
