@@ -129,6 +129,55 @@
       text-transform: uppercase;
       color: var(--muted);
     }
+
+    /* Gyroscope permission banner */
+    #gyro-banner {
+      width: 100%;
+      max-width: 780px;
+      margin-bottom: 14px;
+      background: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 6px 20px rgba(15, 30, 48, 0.10);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    #gyro-banner.hidden { display: none; }
+
+    .gyro-text {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .gyro-text strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: var(--navy-dark);
+    }
+
+    #gyro-btn {
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    #gyro-btn:hover { background: var(--navy-dark); }
   </style>
 </head>
 <body>
@@ -145,12 +194,21 @@
     Watch the 360° walkthrough below. Click and drag inside the video to look around the exhibit.
   </p>
 
+  <!-- iOS gyroscope permission banner (hidden on Android/desktop) -->
+  <div id="gyro-banner" class="hidden">
+    <div class="gyro-text">
+      <strong>Enable Motion Controls</strong>
+      Allow device motion so the video follows your phone as you look around.
+    </div>
+    <button id="gyro-btn">Enable</button>
+  </div>
+
   <div class="video-card">
     <div class="video-wrap">
       <iframe
         src="https://www.youtube.com/embed/yqLuimEJJoc"
         title="The Birkenhead Mill — 360° Exhibit Walkthrough"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
         allowfullscreen>
       </iframe>
     </div>
@@ -164,5 +222,33 @@
     </div>
   </div>
 
+  <script>
+    // Only show the banner on iOS (requires explicit permission prompt)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (isIOS) {
+      if (typeof DeviceMotionEvent !== 'undefined' &&
+          typeof DeviceMotionEvent.requestPermission === 'function') {
+        // iOS 13+ — needs permission request
+        document.getElementById('gyro-banner').classList.remove('hidden');
+
+        document.getElementById('gyro-btn').addEventListener('click', async () => {
+          try {
+            const motionResult  = await DeviceMotionEvent.requestPermission();
+            const orientResult  = await DeviceOrientationEvent.requestPermission();
+            if (motionResult === 'granted' && orientResult === 'granted') {
+              document.getElementById('gyro-banner').classList.add('hidden');
+            } else {
+              alert('Motion access was denied. You can still drag to look around.');
+              document.getElementById('gyro-banner').classList.add('hidden');
+            }
+          } catch (e) {
+            console.warn('Motion permission error:', e);
+          }
+        });
+      }
+      // iOS 12 and below grants automatically — no banner needed
+    }
+  </script>
 </body>
 </html>
