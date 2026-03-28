@@ -191,14 +191,14 @@
   <div class="divider"></div>
 
   <p class="description">
-    Watch the 360° walkthrough below. Click and drag inside the video to look around the exhibit.
+    Tap <strong>View in Full Screen</strong> below, then move your phone to look around the exhibit in 360°.
   </p>
 
-  <!-- iOS gyroscope permission banner (hidden on Android/desktop) -->
+  <!-- Step 1: iOS motion permission banner -->
   <div id="gyro-banner" class="hidden">
     <div class="gyro-text">
-      <strong>Enable Motion Controls</strong>
-      Allow device motion so the video follows your phone as you look around.
+      <strong>Step 1 — Enable Motion</strong>
+      Required for gyroscope to work on iPhone.
     </div>
     <button id="gyro-btn">Enable</button>
   </div>
@@ -206,49 +206,71 @@
   <div class="video-card">
     <div class="video-wrap">
       <iframe
-        src="https://www.youtube.com/embed/yqLuimEJJoc"
+        id="yt-iframe"
+        src="https://www.youtube.com/embed/yqLuimEJJoc?enablejsapi=1&rel=0"
         title="The Birkenhead Mill — 360° Exhibit Walkthrough"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
         allowfullscreen>
       </iframe>
     </div>
     <div class="video-caption">
-      <!-- Eye icon -->
+      <!-- Expand icon -->
       <svg class="caption-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-        <circle cx="12" cy="12" r="3"/>
+        <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+        <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
       </svg>
-      <span class="caption-text">360° Immersive Exhibit View</span>
+      <span class="caption-text" style="flex:1">For gyroscope: tap fullscreen inside the video player</span>
+      <button id="fs-btn" style="
+        background: var(--navy);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 16px;
+        font-family: 'Raleway', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        white-space: nowrap;
+      ">⛶ Full Screen</button>
     </div>
   </div>
 
   <script>
-    // Only show the banner on iOS (requires explicit permission prompt)
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const iframe = document.getElementById('yt-iframe');
+    const fsBtn  = document.getElementById('fs-btn');
 
-    if (isIOS) {
-      if (typeof DeviceMotionEvent !== 'undefined' &&
-          typeof DeviceMotionEvent.requestPermission === 'function') {
-        // iOS 13+ — needs permission request
-        document.getElementById('gyro-banner').classList.remove('hidden');
+    // ── iOS motion permission ──────────────────────────────────────────
+    if (isIOS && typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+      document.getElementById('gyro-banner').classList.remove('hidden');
 
-        document.getElementById('gyro-btn').addEventListener('click', async () => {
-          try {
-            const motionResult  = await DeviceMotionEvent.requestPermission();
-            const orientResult  = await DeviceOrientationEvent.requestPermission();
-            if (motionResult === 'granted' && orientResult === 'granted') {
-              document.getElementById('gyro-banner').classList.add('hidden');
-            } else {
-              alert('Motion access was denied. You can still drag to look around.');
-              document.getElementById('gyro-banner').classList.add('hidden');
-            }
-          } catch (e) {
-            console.warn('Motion permission error:', e);
-          }
-        });
-      }
-      // iOS 12 and below grants automatically — no banner needed
+      document.getElementById('gyro-btn').addEventListener('click', async () => {
+        try {
+          await DeviceMotionEvent.requestPermission();
+          await DeviceOrientationEvent.requestPermission();
+        } catch(e) {}
+        document.getElementById('gyro-banner').classList.add('hidden');
+      });
     }
+
+    // ── Fullscreen helper ──────────────────────────────────────────────
+    // On iOS, the only way to get gyro inside a YouTube iframe is to go
+    // fullscreen — this button triggers it programmatically.
+    fsBtn.addEventListener('click', () => {
+      const el = iframe;
+
+      if (el.requestFullscreen)            el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); // iOS Safari
+      else if (el.mozRequestFullScreen)    el.mozRequestFullScreen();
+      else if (el.msRequestFullscreen)     el.msRequestFullscreen();
+      else {
+        // Last resort for older iOS: open in new tab at full size
+        window.open('https://www.youtube.com/embed/yqLuimEJJoc?autoplay=1', '_blank');
+      }
+    });
   </script>
 </body>
 </html>
