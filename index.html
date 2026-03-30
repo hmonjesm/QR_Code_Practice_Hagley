@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Birkenhead Mill — Hagley Museum & Library</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Machine Shop & Gun Powder Demo — Hagley Museum & Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --navy: #1b2d45;
@@ -14,9 +14,9 @@
       --text: #2c3e52;
       --accent: #c9a96e;
     }
-
+ 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
     body {
       background: var(--light-bg);
       color: var(--text);
@@ -27,7 +27,7 @@
       align-items: center;
       padding: 48px 20px 60px;
     }
-
+ 
     /* Decorative top line */
     .top-line {
       width: 1px;
@@ -36,7 +36,7 @@
       margin-bottom: 28px;
       opacity: 0.4;
     }
-
+ 
     /* Institution label */
     .institution {
       font-family: 'Raleway', sans-serif;
@@ -47,18 +47,19 @@
       color: var(--muted);
       margin-bottom: 14px;
     }
-
+ 
     /* Main title */
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 8vw, 52px);
+      font-size: clamp(28px, 6vw, 44px);
       font-weight: 700;
       color: var(--navy-dark);
       text-align: center;
-      line-height: 1.15;
+      line-height: 1.2;
       margin-bottom: 18px;
+      max-width: 700px;
     }
-
+ 
     /* Divider */
     .divider {
       width: 40px;
@@ -67,7 +68,7 @@
       margin: 0 auto 24px;
       opacity: 0.5;
     }
-
+ 
     /* Description */
     .description {
       font-family: 'Cormorant Garamond', serif;
@@ -75,28 +76,28 @@
       font-weight: 300;
       color: var(--text);
       text-align: center;
-      max-width: 360px;
+      max-width: 520px;
       line-height: 1.7;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
-
-    /* Video card */
+ 
+    /* Video card — wider for a regular video */
     .video-card {
       width: 100%;
-      max-width: 780px;
-      background: white;
+      max-width: 960px;
+      background: #0f1e30;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 12px 40px rgba(15, 30, 48, 0.13);
+      box-shadow: 0 16px 48px rgba(15, 30, 48, 0.22);
     }
-
-    /* Responsive video wrapper */
+ 
+    /* Responsive 16:9 video wrapper */
     .video-wrap {
       position: relative;
       width: 100%;
       padding-top: 56.25%;
     }
-
+ 
     .video-wrap iframe {
       position: absolute;
       top: 0; left: 0;
@@ -105,172 +106,164 @@
       border: 0;
       display: block;
     }
-
-    /* Caption below video */
-    .video-caption {
-      padding: 18px 24px;
+ 
+    /* Toolbar below video */
+    .video-toolbar {
+      padding: 14px 20px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border-top: 1px solid #eaeef2;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-
-    .caption-icon {
-      width: 18px;
-      height: 18px;
-      opacity: 0.45;
-      flex-shrink: 0;
-    }
-
-    .caption-text {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
+ 
+    .toolbar-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: rgba(255,255,255,0.45);
     }
-
-    /* Gyroscope permission banner */
-    #gyro-banner {
+ 
+    .toolbar-label svg {
+      width: 15px;
+      height: 15px;
+      opacity: 0.6;
+    }
+ 
+    /* Watch on YouTube link */
+    .yt-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-family: 'Raleway', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      border-radius: 7px;
+      transition: background 0.2s, color 0.2s;
+    }
+ 
+    .yt-link:hover {
+      background: #ff0000;
+      border-color: #ff0000;
+      color: white;
+    }
+ 
+    .yt-link svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+ 
+    /* Citation block */
+    .citation-block {
       width: 100%;
-      max-width: 780px;
-      margin-bottom: 14px;
+      max-width: 960px;
+      margin-top: 28px;
       background: white;
       border-radius: 12px;
-      padding: 16px 20px;
-      box-shadow: 0 6px 20px rgba(15, 30, 48, 0.10);
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 16px rgba(15, 30, 48, 0.08);
+      border-left: 3px solid var(--navy);
     }
-
-    #gyro-banner.hidden { display: none; }
-
-    .gyro-text {
-      flex: 1;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .gyro-text strong {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 2px;
-      color: var(--navy-dark);
-    }
-
-    #gyro-btn {
-      background: var(--navy);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-family: 'Raleway', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+ 
+    .citation-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
+      color: var(--muted);
+      margin-bottom: 8px;
     }
-
-    #gyro-btn:hover { background: var(--navy-dark); }
+ 
+    .citation-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.7;
+    }
+ 
+    .citation-text a {
+      color: var(--navy);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      word-break: break-all;
+    }
+ 
+    .citation-text a:hover {
+      color: var(--accent);
+    }
   </style>
 </head>
 <body>
-
+ 
   <div class="top-line"></div>
-
+ 
   <p class="institution">Hagley Museum &amp; Library</p>
-
-  <h1>The Birkenhead<br>Mill</h1>
-
+ 
+  <h1>Machine Shop &amp; Gun Powder Demo</h1>
+ 
   <div class="divider"></div>
-
+ 
   <p class="description">
-    Tap <strong>View in Full Screen</strong> below, then move your phone to look around the exhibit in 360°.
+    A walkthrough of the Hagley Museum machine shop, featuring a water turbine demonstration and historic gun powder production exhibits.
   </p>
-
-  <!-- Step 1: iOS motion permission banner -->
-  <div id="gyro-banner" class="hidden">
-    <div class="gyro-text">
-      <strong>Step 1 — Enable Motion</strong>
-      Required for gyroscope to work on iPhone.
-    </div>
-    <button id="gyro-btn">Enable</button>
-  </div>
-
+ 
   <div class="video-card">
     <div class="video-wrap">
       <iframe
-        id="yt-iframe"
-        src="https://www.youtube.com/embed/yqLuimEJJoc?enablejsapi=1&rel=0"
-        title="The Birkenhead Mill — 360° Exhibit Walkthrough"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
+        src="https://www.youtube.com/embed/Vw1WI56ghMM"
+        title="Hagley Museum Machine Shop and Gun Powder Demo"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen>
       </iframe>
     </div>
-    <div class="video-caption">
-      <!-- Expand icon -->
-      <svg class="caption-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
-        <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
-      </svg>
-      <span class="caption-text" style="flex:1">For gyroscope: tap fullscreen inside the video player</span>
-      <button id="fs-btn" style="
-        background: var(--navy);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 9px 16px;
-        font-family: 'Raleway', sans-serif;
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        cursor: pointer;
-        white-space: nowrap;
-      ">⛶ Full Screen</button>
+ 
+    <div class="video-toolbar">
+      <span class="toolbar-label">
+        <!-- Film icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="2" y1="17" x2="7" y2="17"/>
+        </svg>
+        Exhibit Video
+      </span>
+ 
+      <a
+        class="yt-link"
+        href="https://www.youtube.com/watch?v=Vw1WI56ghMM"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <!-- YouTube logo -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/>
+        </svg>
+        Watch on YouTube
+      </a>
     </div>
   </div>
-
-  <script>
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const iframe = document.getElementById('yt-iframe');
-    const fsBtn  = document.getElementById('fs-btn');
-
-    // ── iOS motion permission ──────────────────────────────────────────
-    if (isIOS && typeof DeviceMotionEvent !== 'undefined' &&
-        typeof DeviceMotionEvent.requestPermission === 'function') {
-      document.getElementById('gyro-banner').classList.remove('hidden');
-
-      document.getElementById('gyro-btn').addEventListener('click', async () => {
-        try {
-          await DeviceMotionEvent.requestPermission();
-          await DeviceOrientationEvent.requestPermission();
-        } catch(e) {}
-        document.getElementById('gyro-banner').classList.add('hidden');
-      });
-    }
-
-    // ── Fullscreen helper ──────────────────────────────────────────────
-    // On iOS, the only way to get gyro inside a YouTube iframe is to go
-    // fullscreen — this button triggers it programmatically.
-    fsBtn.addEventListener('click', () => {
-      const el = iframe;
-
-      if (el.requestFullscreen)            el.requestFullscreen();
-      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); // iOS Safari
-      else if (el.mozRequestFullScreen)    el.mozRequestFullScreen();
-      else if (el.msRequestFullscreen)     el.msRequestFullscreen();
-      else {
-        // Last resort for older iOS: open in new tab at full size
-        window.open('https://www.youtube.com/embed/yqLuimEJJoc?autoplay=1', '_blank');
-      }
-    });
-  </script>
+ 
+  <!-- Citation -->
+  <div class="citation-block">
+    <p class="citation-label">Video Citation</p>
+    <p class="citation-text">
+      custom fabrications. (2025, September 20). <em>Hagley Museum machine shop and gun powder demo. My future retirement plan!</em> [Video]. YouTube.
+      <a href="https://www.youtube.com/watch?v=Vw1WI56ghMM" target="_blank" rel="noopener noreferrer">
+        https://www.youtube.com/watch?v=Vw1WI56ghMM
+      </a>
+    </p>
+  </div>
+ 
 </body>
 </html>
