@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Machine Shop & Gun Powder Demo — Hagley Museum & Library</title>
+  <title>Machine Shop 360° — Hagley Museum & Library</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -204,6 +204,30 @@
     .citation-text a:hover {
       color: var(--accent);
     }
+ 
+    /* Gyroscope permission banner */
+    #gyro-banner {
+      width: 100%;
+      max-width: 960px;
+      margin-bottom: 14px;
+      background: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 6px 20px rgba(15, 30, 48, 0.10);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    #gyro-banner.hidden { display: none; }
+    .gyro-text { flex: 1; font-size: 13px; color: var(--text); line-height: 1.5; }
+    .gyro-text strong { display: block; font-weight: 600; margin-bottom: 2px; color: var(--navy-dark); }
+    #gyro-btn {
+      background: var(--navy); color: white; border: none; border-radius: 8px;
+      padding: 10px 18px; font-family: 'Raleway', sans-serif; font-size: 12px;
+      font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; white-space: nowrap; transition: background 0.2s;
+    }
+    #gyro-btn:hover { background: var(--navy-dark); }
   </style>
 </head>
 <body>
@@ -212,20 +236,29 @@
  
   <p class="institution">Hagley Museum &amp; Library</p>
  
-  <h1>Machine Shop &amp; Gun Powder Demo</h1>
+  <h1>The Machine Shop</h1>
  
   <div class="divider"></div>
  
   <p class="description">
-    A walkthrough of the Hagley Museum machine shop, featuring a water turbine demonstration and historic gun powder production exhibits.
+    Explore the Hagley Museum machine shop in immersive 360°. Click and drag to look around the exhibit.
   </p>
+ 
+  <!-- iOS gyroscope permission banner -->
+  <div id="gyro-banner" class="hidden">
+    <div class="gyro-text">
+      <strong>Enable Motion Controls</strong>
+      Allow device motion so the video follows your phone as you look around.
+    </div>
+    <button id="gyro-btn">Enable</button>
+  </div>
  
   <div class="video-card">
     <div class="video-wrap">
       <iframe
-        src="https://www.youtube.com/embed/Vw1WI56ghMM"
-        title="Hagley Museum Machine Shop and Gun Powder Demo"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        src="https://www.youtube.com/embed/VeMuDYm6fXw"
+        title="Hagley Museum Machine Shop — 360° Tour"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; xr-spatial-tracking"
         allowfullscreen>
       </iframe>
     </div>
@@ -241,7 +274,7 @@
  
       <a
         class="yt-link"
-        href="https://www.youtube.com/watch?v=Vw1WI56ghMM"
+        href="https://www.youtube.com/watch?v=VeMuDYm6fXw"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -258,12 +291,26 @@
   <div class="citation-block">
     <p class="citation-label">Video Citation</p>
     <p class="citation-text">
-      custom fabrications. (2025, September 20). <em>Hagley Museum machine shop and gun powder demo. My future retirement plan!</em> [Video]. YouTube.
-      <a href="https://www.youtube.com/watch?v=Vw1WI56ghMM" target="_blank" rel="noopener noreferrer">
-        https://www.youtube.com/watch?v=Vw1WI56ghMM
+      custom fabrications. (2025). <em>Hagley Museum Machine Shop 360°</em> [Video]. YouTube.
+      <a href="https://www.youtube.com/watch?v=VeMuDYm6fXw" target="_blank" rel="noopener noreferrer">
+        https://www.youtube.com/watch?v=VeMuDYm6fXw
       </a>
     </p>
   </div>
  
+  <script>
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS && typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+      document.getElementById('gyro-banner').classList.remove('hidden');
+      document.getElementById('gyro-btn').addEventListener('click', async () => {
+        try {
+          await DeviceMotionEvent.requestPermission();
+          await DeviceOrientationEvent.requestPermission();
+        } catch(e) {}
+        document.getElementById('gyro-banner').classList.add('hidden');
+      });
+    }
+  </script>
 </body>
 </html>
