@@ -206,9 +206,9 @@
   <a class="video-card" href="https://www.youtube.com/watch?v=VeMuDYm6fXw" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:block;">
     <div class="video-wrap">
       <img
-        src="https://img.youtube.com/vi/VeMuDYm6fXw/sddefault.jpg"
+        id="yt-thumb"
+        src="https://img.youtube.com/vi/VeMuDYm6fXw/hqdefault.jpg"
         alt="Hagley Museum Machine Shop 360° Tour thumbnail"
-        onerror="this.src='https://img.youtube.com/vi/VeMuDYm6fXw/hqdefault.jpg'"
       />
       <!-- Play button overlay -->
       <div class="play-overlay">
@@ -247,5 +247,31 @@
     </p>
   </div>
  
+  <script>
+    // YouTube's public image URLs sometimes return a grey placeholder for
+    // videos with custom thumbnails. Use the oEmbed API to get the real one.
+    const videoId = 'VeMuDYm6fXw';
+    const thumb = document.getElementById('yt-thumb');
+ 
+    fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.thumbnail_url) {
+          // oEmbed returns hqdefault — upgrade to maxresdefault and fall back if missing
+          const maxres = data.thumbnail_url.replace('hqdefault', 'maxresdefault');
+          const testImg = new Image();
+          testImg.onload = () => {
+            // Maxres loaded fine (not a 120x90 placeholder)
+            if (testImg.width > 200) thumb.src = maxres;
+            else thumb.src = data.thumbnail_url;
+          };
+          testImg.onerror = () => { thumb.src = data.thumbnail_url; };
+          testImg.src = maxres;
+        }
+      })
+      .catch(() => {
+        // oEmbed failed — already showing hqdefault, leave as-is
+      });
+  </script>
 </body>
 </html>
